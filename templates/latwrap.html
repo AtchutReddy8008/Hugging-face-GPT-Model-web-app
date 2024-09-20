@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Interface</title>
+    <style>
+        .chat-box {
+            width: 100%;
+            height: 80vh;
+            overflow-y: scroll;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+        .message {
+            margin: 10px 0;
+        }
+        .user-message {
+            background-color: #e0e0e0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .ai-response {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        #response-output {
+            font-family: Arial, sans-serif;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="chat-box" id="chat-box">
+        <!-- Display conversation -->
+        {% for conversation in conversations %}
+        <div class="message">
+            <div class="user-message">
+                <strong>You:</strong> {{ conversation.user_input }}
+                <p class="timestamp">{{ conversation.timestamp }}</p>
+            </div>
+            <div class="ai-response">
+                <strong>AI:</strong>
+                {% if forloop.last %}
+                <span id="response-output"></span>
+                {% else %}
+                <span>{{ conversation.model_response }}</span>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Form to accept user input -->
+    <form method="POST">
+        {% csrf_token %}
+        <textarea id="user_input" name="user_input" rows="4" placeholder="Enter your question here..." required></textarea>
+        <input type="submit" value="Send">
+    </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Animate the most recent response
+            let responseText = `{{ conversations.last.model_response|escapejs }}`;
+            let words = responseText.split(' '); // Split the response into words
+            let index = 0;
+            let outputDiv = document.getElementById('response-output');
+
+            function displayNextWord() {
+                if (index < words.length) {
+                    outputDiv.innerHTML += words[index] + ' ';
+                    index++;
+                    setTimeout(displayNextWord, 100); // Adjust typing speed here
+                }
+            }
+
+            displayNextWord(); // Start typing the response
+        });
+    </script>
+
+</body>
+</html>

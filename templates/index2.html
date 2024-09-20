@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            margin-bottom: 30px;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        input[type="submit"] {
+            padding: 10px;
+            width: 100%;
+            border: none;
+            background-color: #28a745;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #218838;
+        }
+
+        .chat-box {
+            margin-top: 20px;
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-radius: 10px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            max-width: 70%;
+        }
+
+        .user-message {
+            background-color: #d1e7dd;
+            align-self: flex-end;
+        }
+
+        .ai-response {
+            background-color: #f8d7da;
+            align-self: flex-start;
+        }
+
+        .timestamp {
+            font-size: 0.8em;
+            color: #777;
+            text-align: right;
+        }
+
+        .chat-item {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="chat-box"></div>
+        {% for conversation in conversations %}
+            <!-- User input -->
+            <div class="chat-item">
+                <div class="message user-message">
+                    <p><strong>You:</strong> {{ conversation.user_input }}</p>
+                    <p class="timestamp">{{ conversation.timestamp }}</p>
+                </div>
+
+                <!-- AI response -->
+                <div class="message ai-response">
+                    <p><strong>AI:</strong> {{ conversation.model_response }}</p>
+                    <p class="timestamp">{{ conversation.timestamp }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <h1>AI Chat</h1>
+
+    <!-- Form to accept user input -->
+    <form method="POST">
+        {% csrf_token %}
+        <textarea id="user_input" name="user_input" rows="4" placeholder="Enter your question here..." required></textarea>
+        <input type="submit" value="Send">
+    </form>
+
+    <!-- Display the conversation -->
+    
+</div>
+
+</body>
+</html>
